@@ -1,0 +1,279 @@
+body {
+    height: 95%;
+}
+@font-face {
+    font-family: "Starjedi";
+    src: url(/static/css/fonts/Starjedi.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Starjhol";
+    src: url(/static/css/fonts/Starjhol.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Starjout";
+    src: url(/static/css/fonts/Starjout.ttf) format("truetype");
+}
+@font-face {
+    font-family: "STJEDISE";
+    src: url(/static/css/fonts/STJEDISE.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Stjldbl1";
+    src: url(/static/css/fonts/Stjldbl1.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Stjldbl2";
+    src: url(/static/css/fonts/Stjldbl2.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Strjmono";
+    src: url(/static/css/fonts/Strjmono.ttf) format("truetype");
+}
+.r2d2 {
+    width: 90%;
+border: 2px solid #ADABAC;
+border-radius: 25px;
+height: auto;
+margin-left: 5%;
+min-height: 95vh;
+}
+.r2d2 .headline {
+    margin: 10px;
+    position: relative;
+}
+.r2d2 .headline .title {
+    position: absolute;
+    font-family: Starjedi;
+    font-size: 1.2vw;
+    color: #adabac;
+}
+.r2d2 .headline svg {
+    position: absolute;
+    fill: #153d82;
+}
+.r2d2 .headline .interface {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+.r2d2 .headline .interfacetop {
+    height: 50%;
+    width: 100%;
+    position: relative;
+}
+.r2d2 .headline .interfacebottom {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 50%;
+    position: absolute;
+}
+.r2d2 .headline .interfacebottom .ib1 {
+    width: 3%;
+    order: 1;
+    background-color: #153d82;
+    margin-right: 0.5%;
+}
+.r2d2 .headline .interfacebottom .ib2 {
+    width: 2%;
+    order: 2;
+    background-color: #153d82;
+    margin-right: 0.5%;
+}
+.r2d2 .headline .interfacebottom .ib3 {
+    width: 10%;
+    order: 3;
+    background-color: #153d82;
+    display: flex;
+}
+.r2d2 .headline .interfacebottom .ib3 div {
+    height: 80%;
+    order: 3;
+    background-color: #adabac;
+    width: 100%;
+    margin: 5%;
+    border-radius: 1000px;
+}
+.r2d2 .headline .interfacebottom .ib4 {
+    width: 2%;
+    order: 4;
+    background-color: #153d82;
+    margin-right: 0.5%;
+    margin-left: 0.5%;
+}
+.r2d2 .headline .interfacebottom .ib5 {
+    order: 5;
+    background-color: #153d82;
+    margin-right: 0.5%;
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+}
+.r2d2 .headline .interfacebottom .ib5 .blackhalf {
+    display: flex;
+    height: 90%;
+    left: 5px;
+    position: relative;
+    top: 5%;
+}
+.r2d2 .headline .interfacebottom .ib5 .blackhalf > img {
+    display: inline;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.r2d2 .headline .interfacebottom .ib5 .blackhalf .bhleft {
+    background-color: black;
+    border-radius: 50% 0 0 50%;
+}
+.r2d2 .headline .interfacebottom .ib5 .blackhalf .bhcenter {
+    background-color: #153d82;
+    width: 10px;
+}
+.r2d2 .headline .interfacebottom .ib5 .blackhalf .bhright {
+    background-color: black;
+    border-radius: 0 50% 50% 0;
+}
+.r2d2 .headline .interfacebottom .ib5 .redcircle {
+    flex-grow: 1;
+    float: right;
+    height: 100%;
+}
+.r2d2 .headline .interfacebottom .ib5 .redcircle .red {
+    background-color: #a62a46;
+    border-radius: 50%;
+    float: right;
+    height: 90%;
+    margin-right: 10px;
+    margin-top: 1px;
+}
+.r2d2 .headline .interfacebottom .ib6 {
+    height: 100%;
+    order: 6;
+    border: 1px solid #153d82;
+    box-sizing: border-box;
+    position: relative;
+}
+.r2d2 .headline .menu {
+    cursor: pointer;
+}
+.r2d2 .headline .menu > div {
+    height: 17%;
+    width: 80%;
+    margin: 10% 16% 10% 0%;
+    background-color: #ADABAC;
+    border-radius: 5px;
+    position: relative;
+    top: -100%;
+    left: 10%;
+}
+.r2d2 .headline .interfacetop .ithead {
+    background-color: #153d82;
+    border-radius: 50% 50% 0 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+.r2d2 .headline .interfacetop .itheado {
+    background-color: white;
+    border-radius: 50% 50% 0 0;
+    height: 90%;
+    width: 100%;
+    position: absolute;
+    top: 5px;
+}
+.r2d2 .headline .interfacetop .itheadeye {
+    background: #153d82 none repeat scroll 0 0;
+    border-radius: 50% 50% 0 0;
+    height: 50%;
+    margin: 0 15%;
+    position: relative;
+    top: 30%;
+    width: 70%;
+}
+.barbot .barbot_size {
+    position: relative;
+    margin: auto;
+    overflow: hidden;
+}
+.barbot .barbot_loadingpage {
+    margin-left: 0%;
+    width: 90%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    min-height: 100%;
+    height: 100%;
+    text-align: center;
+}
+.barbot .barbot_loadingpage .barbot_loadingpage_star {
+    font-family: Starjedi;
+    color: #adabac;
+}
+.barbot .barbot_settingspage .menubutton {
+    border: 2px solid #ADABAC;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 50px;
+    text-align: center;
+    cursor: pointer;
+    font-family: Starjedi;
+    color: #153d82;
+}
+
+.barbot .barbot_settingspage .menubutton:hover {
+    background-color: #153d82;
+    color: #ADABAC;
+}
+
+.barbot .flowcontainer {
+    display: block;
+}
+
+.barbot .flowitem {
+border: 1px solid #ADABAC;
+position: relative;
+border-radius: 10px;
+display: block;
+max-width: 200px;
+width: 30%;
+float: left;
+margin: 0% 0% 1% 1%;
+cursor: pointer;
+overflow: hidden;
+}
+
+.barbot .flowitem > img {
+    width: 100%;
+}
+
+.barbot .flowitem > div {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+top: 0px;
+left: 0px;
+}
+
+.barbot .flowitem .cocktail {
+    text-align: center;
+}
+
+.barbot .flowitem .cocktail img {
+    height: 80%;
+    max-width: 100%;
+}
+
+.barbot .flowitem .cocktail .name {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: calc(0.5em + 1vw);
+    white-space: nowrap;
+}
+
+.barbot .flowitem .cocktail .id{
+    display:  none;
+}
+
+.ratio {
+    height: 100%;
+}
