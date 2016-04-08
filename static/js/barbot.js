@@ -73,7 +73,7 @@ function BarBot(container) {
     output += "</div>";
     output += "</div>";
     output += "<div class='barbot_settingspage'>";
-    output += "<div class='barbot_settingspage_content'>blub";
+    output += "<div class='barbot_settingspage_content'>";
     output += "</div>";
     output += "</div>";
     output += "</div>";
@@ -170,7 +170,7 @@ function BarBot(container) {
         output += "<input type='submit' value='Submit' id='submit'>";
         output += "</div>";
         $(".barbot .barbot_settingspage .barbot_settingspage_content").html(output);
-        $(".barbot .barbot_settingspage .barbot_settingspage_content #submit").click(function(){
+        $(".barbot .barbot_settingspage .barbot_settingspage_content #submit").click(function () {
           barBot.communication.addIngredient();
         });
       });
@@ -180,9 +180,13 @@ function BarBot(container) {
       $(".barbot .barbot_loadingpage").hide();
       $(".barbot .barbot_orderpage").hide();
       $(".barbot .barbot_settingspage").show();
-      $(".barbot .barbot_settingspage .barbot_settingspage_content").html("");
+      $(".barbot .barbot_settingspage .barbot_settingspage_content").html("<div class='flowcontainer'></div>");
       var output = "";
-
+      for (var i = 1; i < 9; i++) {
+        output += "<div class='flowitem slot' id='slot" + i + "'><img src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'><div class='cocktail'><img src='/static/img/res/ingredients/empty.png'><div><div class='id'>" + i + "</div><div class='name red'>leer</div></div></div></div>";
+      }
+      $(".barbot .barbot_settingspage .barbot_settingspage_content .flowcontainer").html(output);
+      barBot.communication.loadSlots("settingspage");
     }
 
   }
@@ -309,9 +313,9 @@ function BarBot(container) {
         .always(function (data) {
           if (data && data.list) {
             var output = "";
-            var flowcontainer = $(".barbot .barbot_"+ page +" .barbot_"+ page +"_content .flowcontainer")[0];
+            var flowcontainer = $(".barbot .barbot_" + page + " .barbot_" + page + "_content .flowcontainer")[0];
             if (!flowcontainer) {
-              $(".barbot .barbot_"+ page +" .barbot_"+ page +"_content").html("<div class='flowcontainer'></div>");
+              $(".barbot .barbot_" + page + " .barbot_" + page + "_content").html("<div class='flowcontainer'></div>");
             }
             data.list.forEach(function (s, i, o) {
               output += "<div class='flowitem'><img src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>";
@@ -322,7 +326,7 @@ function BarBot(container) {
               output += "</div>";
               output += "</div>";
             });
-            $(".barbot .barbot_"+ page +" .barbot_"+ page +"_content .flowcontainer").append(output);
+            $(".barbot .barbot_" + page + " .barbot_" + page + "_content .flowcontainer").append(output);
           }
         });
     },
@@ -353,7 +357,31 @@ function BarBot(container) {
       }
       $.ajax({ url: barBot.serverurl + "/add_ingredient", dataType: 'jsonp', jsonp: "callback", data: reqdata })
         .always(function (data) {
-         barBot.click.addIngredients();
+          barBot.click.addIngredients();
+        });
+    },
+    loadSlots: function loadSlots() {
+      var reqdata = {
+      }
+      $.ajax({ url: barBot.serverurl + "/list_slots", dataType: 'jsonp', jsonp: "callback", data: reqdata })
+        .always(function (data) {
+          if (data && data.list) {
+            var output = "";
+            data.list.forEach(function (s, i, o) {
+                output = "<img src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>";
+                output += "<div class='cocktail'>";              
+              if (!s.name || s.name == "None") {
+                output += "<img src='/static/img/res/ingredients/empty.png'>";
+              } else {
+                output += "<img src='/static/img/res/ingredients/" + s.image + "'>";
+                output += "<div class='name'>" + s.name + "</div>";
+                output += "<div class='ingredient'>" + s.ingredient + "</div>";
+              }
+              output += "<div class='id'>" + s.id + "</div>";
+              output += "</div>";
+              $("#slot" + s.id).html(output).addClass("slot");
+            });
+          }
         });
     }
   }
