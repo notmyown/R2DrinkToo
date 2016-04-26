@@ -289,3 +289,32 @@ left: 0;
 .red {
     color: red;
 }
+
+.barbot_settingspage_content .addingredientscontainer {
+border: 1px solid;
+border-radius: 5px;
+margin: 1%;
+width: 98%;
+}
+
+.barbot_settingspage_content .addingredientscontainer .flowingredient{
+ margin:2px;
+ border: 1px solid;
+}
+
+.barbot_settingspage_content .addingredientscontainer .flowingredient div{
+  float: left;
+}
+
+.barbot_settingspage_content .addingredientscontainer .flowingredient img {
+ vertical-align:middle;
+}
+
+.barbot_settingspage_content .addingredientscontainer .flowingredient#addingredient {
+  cursor: pointer;
+}
+
+.barbot_settingspage_content .addingredientscontainer .flowingredient#addingredient:hover {
+  background-color: #153d82;
+    color: #ADABAC;
+}

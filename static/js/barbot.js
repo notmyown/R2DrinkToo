@@ -146,9 +146,30 @@ function BarBot(container) {
       $(".barbot .barbot_settingspage").show();
       $(".barbot .barbot_settingspage .barbot_settingspage_content").html("<div class='flowcontainer'></div>");
       var output = "";
-      output += "<div class='flowitem'><img src='/static/img/plus.jpg'><div></div></div>";
+      output += "<div class='flowitem' id='plus'><img src='/static/img/plus.jpg'><div></div></div>";
       $(".barbot .barbot_settingspage .barbot_settingspage_content .flowcontainer").html(output);
       barBot.communication.loadCocktails("settingspage");
+      $(".barbot .barbot_settingspage .barbot_settingspage_content .flowcontainer #plus").click(function () {
+        var output = "";
+        output += "<div>Cocktail hinzufügen<br>";
+        output += "<label for='name'>Name</label>";
+        output += "<input type='text' name='name' id='name' value=''><br>";
+        output += "<label for='image'>Bild</label>";
+        output += "<input type='file' name='image' id='image' value=''><br>";
+        output += "<span>Zutaten:</span><br>";
+        output += "<div class='addingredientscontainer'>";
+        output += "<div class='flowingredient' id='addingredient'><img width='30' src='/static/img/plus.jpg'> Hinzufügen</div>"
+        output += "</div>";
+        output += "<input type='submit' value='Submit' id='submit'>";
+        output += "</div>";
+        $(".barbot .barbot_settingspage .barbot_settingspage_content").html(output);
+        $(".barbot .barbot_settingspage .barbot_settingspage_content #submit").click(function () {
+          barBot.communication.addCocktail();
+        });
+        $(".barbot .barbot_settingspage .barbot_settingspage_content #addingredient").click(function () {
+          barBot.communication.addCocktailIngredient();
+        });
+      });
     },
 
     addIngredients: function addIngredients() {
@@ -360,6 +381,43 @@ function BarBot(container) {
           barBot.click.addIngredients();
         });
     },
+    addCocktail: function addCocktail() {
+      var ing = "";
+      $(".barbot .barbot_settingspage .barbot_settingspage_content .addingredientscontainer .flowingredient.new").each(function(s,i,o){
+        var aning = $(this).find("select").val() + "_";
+        aning += $(this).find(".amount").val() + "_";
+        aning += $(this).find(".provided").val();
+        ing += aning + "-";
+      });
+      var reqdata = {
+        name: $(".barbot .barbot_settingspage .barbot_settingspage_content #name").val(),
+        image: $(".barbot .barbot_settingspage .barbot_settingspage_content #image").val(),
+        ingredients: ing
+      }
+      $.ajax({ url: barBot.serverurl + "/add_cocktail", dataType: 'jsonp', jsonp: "callback", data: reqdata })
+        .always(function (data) {
+          barBot.click.addCocktail();
+        });
+    },
+    addCocktailIngredient: function addCocktailIngredient() {
+      var reqdata = {
+      }
+      $.ajax({ url: barBot.serverurl + "/list_ingredients", dataType: 'jsonp', jsonp: "callback", data: reqdata })
+        .always(function (data) {
+          if (data && data.list) {
+            var output = "";
+            output += "<div class='flowingredient new'><img width='30' src='/static/img/minus.jpg' class='removeingredient'><div><select>";
+            data.list.forEach(function (s, i, o) {
+              output += "<option value='" +  s.id + "'>" + s.name + "</option>";
+            });
+            output += "</select></div><div>Menge:<input class='amount' value='0'/></div><div>Vorrausgesetz: <input type='checkbox' class='provided'/><div></div></div>";
+            $(".barbot .barbot_settingspage .barbot_settingspage_content .addingredientscontainer").append(output);
+            $(".barbot .barbot_settingspage .barbot_settingspage_content .addingredientscontainer img:last").click(function(e) {
+              $(e.target.parentNode).remove();
+            });
+          }
+        });
+    },
     loadSlots: function loadSlots() {
       var reqdata = {
       }
@@ -369,7 +427,7 @@ function BarBot(container) {
             var output = "";
             data.list.forEach(function (s, i, o) {
                 output = "<img src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>";
-                output += "<div class='cocktail'>";              
+                output += "<div class='cocktail'>";
               if (!s.name || s.name == "None") {
                 output += "<img src='/static/img/res/ingredients/empty.png'>";
               } else {

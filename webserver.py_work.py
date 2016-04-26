@@ -83,6 +83,36 @@ def add_ingredient():
         json = str(callback) + '({"list":['
         json += "]})"
     return json
+    
+@app.route("/barbot/add_cocktail") 
+def add_cocktail():
+    con = lite.connect(dbname)
+    with con:
+        callback = request.args.get('callback')
+        name = request.args.get('name')
+        image = request.args.get('image')
+        ingredients = request.args.get('ingredients')
+        
+        con.row_factory = lite.Row
+        cur = con.cursor()
+        cur.execute('INSERT INTO Drinks (NAME, IMAGE) VALUES ("' + str(name) + '", "' + str(image) + '")')
+        splits = ingredients.split("-");
+        drinkid = cur.lastrowid
+        print(str(name) + ' - ' + str(image) + " - " + str(drinkid) + " - " + str(splits))
+        for splitme in splits:
+            print(str(splitme))
+            splits2 = splitme.split("_");
+            print(str(splits2))
+            if len(splits2) == 3:
+                if splits2[2] == "on" or splits2[2] == "on-":
+                    splits2[2] = str(1)
+                else:
+                    splits2[2] = str(0)
+                cur.execute('INSERT INTO IngredientsToDrinks (DRINKID, INGREDIENT, AMOUNT, PROVIDED) VALUES ("' + str(drinkid) + '", "' + str(splits2[0]) + '","' + str(splits2[1]) + '","' + str(splits2[2]) + '")')
+        con.commit();
+        json = str(callback) + '({"list":['
+        json += "]})"
+    return json
 
 @app.route("/barbot/drink_info") 
 def drink_info():
@@ -133,6 +163,12 @@ def order_drink():
             json += '"ingredients" : ' + '[' + str(row["INGREDIENTS"]) + ']'
         json += "})"
     return json
+
+def toString(obj):
+    val = str(obj);
+    val2 = val.decode("utf-8")
+    return val2
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
