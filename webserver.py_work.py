@@ -32,7 +32,7 @@ def list_drinks():
             json += '"image" : ' + '"' + str(row["IMAGE"]) + '"},'
         json += "]})"
     return json
-    
+
 @app.route("/barbot/list_ingredients") 
 def list_ingredients():
     con = lite.connect(dbname)
@@ -125,16 +125,18 @@ def drink_info():
         sql = "select Drinks.NAME, Ingredients.NAME as INGREDIENT,  IngredientsToDrinks.AMOUNT, IngredientsToDrinks.PROVIDED, Drinks.IMAGE, Ingredients.IMAGE as INGREDIENTIMAGE, Slot.ID as SLOT "
         sql += "from Drinks join IngredientsToDrinks on Drinks.ID = IngredientsToDrinks.DRINKID join Ingredients on IngredientsToDrinks.INGREDIENT = Ingredients.ID left join Slot on Slot.INGREDIENT = Ingredients.ID "
         sql += "where Drinks.ID = " + str(drinkid)
+        print(str())
         cur.execute(sql)
         rows = cur.fetchall()
         json = str(callback)
         if len(rows) > 0:
             json += '({ "name" : "' + rows[0]["NAME"] + '", '
             json += '"image" : "' + rows[0]["IMAGE"] + '", '
+            json += '"drinkid" : "' + drinkid + '", '
             json += '"ingredients" : ['
             for row in rows:
                 json += '{ "ingredient" : ' + '"' + str(row["INGREDIENT"]) + '",'
-                json += '"amout" : "' + str(row["AMOUNT"]) + '",'
+                json += '"amount" : "' + str(row["AMOUNT"]) + '",'
                 json += '"slot" : "' + str(row["SLOT"]) + '",'
                 json += '"provided" : "' + str(row["PROVIDED"]) + '",'
                 json += '"image" : "' + str(row["INGREDIENTIMAGE"]) + '"'

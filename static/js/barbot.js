@@ -348,6 +348,39 @@ function BarBot(container) {
               output += "</div>";
             });
             $(".barbot .barbot_" + page + " .barbot_" + page + "_content .flowcontainer").append(output);
+            $(".barbot .barbot_" + page + " .barbot_" + page + "_content .flowcontainer .cocktail").click(function() {
+              var id = $(this).find(".id").text();
+              barBot.communication.loadCocktail(page, id);
+            });
+          }
+        });
+    },
+    loadCocktail: function loadCocktail(page, id) {
+      var reqdata = {
+        drinkid: id
+      }
+      $.ajax({ url: barBot.serverurl + "/drink_info", dataType: 'jsonp', jsonp: "callback", data: reqdata })
+        .always(function (data) {
+          if (data && data.name) {
+            $(".barbot .barbot_" + page + " .barbot_" + page + "_content").html("<div class='cocktaildetail'></div>");
+            var output = "";
+            output += "<div class='name'><h1>" + data.name + "</h1></div>";
+            output += "<div class='row'>";
+            output += "<div class='image'><img src='/static/img/res/cocktails/" + data.image + "'></div>";
+            output += "<div class='ingredients'><ul>";
+            data.ingredients.forEach(function(s,i,o) {
+                output += "<li>" + s.ingredient;
+                if (s.provided) {
+                output += " (" + s.amount + ")";
+                }
+                output += "</li>";
+            });
+            output += "</ul></div>";
+            output += "<div class='order'><div class='button'>bestellen</div></div>";
+            output += "</div>";
+            output += "<div class='id'>" + data.drinkid + "</div>";
+            output += "";
+            $(".barbot .barbot_" + page + " .barbot_" + page + "_content .cocktaildetail").append(output);
           }
         });
     },

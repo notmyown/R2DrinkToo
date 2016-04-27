@@ -6,6 +6,10 @@ body {
     src: url(/static/css/fonts/Starjedi.ttf) format("truetype");
 }
 @font-face {
+    font-family: "StarjediFixed";
+    src: url(/static/css/fonts/StarjediFixed.ttf) format("truetype");
+}
+@font-face {
     font-family: "Starjhol";
     src: url(/static/css/fonts/Starjhol.ttf) format("truetype");
 }
@@ -317,4 +321,66 @@ width: 98%;
 .barbot_settingspage_content .addingredientscontainer .flowingredient#addingredient:hover {
   background-color: #153d82;
     color: #ADABAC;
+}
+
+.cocktaildetail {
+    font-family: Starjedi;
+    color: #adabac;
+}
+
+.cocktaildetail .row{
+
+}
+
+.cocktaildetail .name {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+}
+
+.cocktaildetail .name h1{
+   margin:0;
+}
+
+.cocktaildetail .row .order{
+   position: absolute;
+   width: 100%;
+}
+
+.cocktaildetail .row .order .button{
+   border: 2px solid #adabac;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: Starjedi;
+    margin: 4px 10px 10px;
+    padding: 10px;
+    text-align: center;
+    color: transparent;
+}
+
+.cocktaildetail .row .order .button:hover {
+    background-color: #153d82;
+    color: #ADABAC;
+}
+
+
+.cocktaildetail .id{
+   display: none;
+}
+
+.cocktaildetail .image {
+    display: inline-block;
+    float: left;
+    min-width: 270px;
+    text-align: center;
+    width: auto;
+}
+
+.cocktaildetail .ingredients {
+float: left;
+}
+
+.cocktaildetail .image > img {
+    width: 70%;
+    position: relative;
 }
