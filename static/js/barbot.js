@@ -295,35 +295,34 @@ function BarBot(container) {
       }
     },
     order: function comorder(num) {
-      if (barBot.state.isBusy) {
-        $('<div></div>').appendTo('body')
-          .html('<div><h6>R2DrinkToo hat zu tun.<br/>Bitte versuch es später erneut.</h6></div>')
-          .dialog({
-            modal: true,
-            title: 'R2DrinkToo beschäftigt',
-            zIndex: 10000,
-            autoOpen: true,
-            width: 'auto',
-            resizable: false,
-            buttons: {
-              OK: function () {
-                $(this).dialog("close");
-              }
-            },
-            close: function () {
-              $(this).dialog("close");
-              $(this).remove();
-            }
-          });
-        return;
-      }
       var reqdata = {
         drinkid: num
       }
       $.ajax({ url: barBot.serverurl + "/order", dataType: 'jsonp', jsonp: "callback", data: reqdata })
         .always(function (data) {
-          if (data.status == 200) {
-            //alert("lecker Kaffee");
+          if (data && data.state && data.state == "NOK") {
+            $('<div></div>').appendTo('body')
+              .html('<div><h6>Das Getränk kann nicht zubereitet werden</h6></div>')
+              .dialog({
+                modal: true,
+                title: 'R2DrinkToo ist nicht bereit',
+                zIndex: 10000,
+                autoOpen: true,
+                width: '95%',
+                resizable: false,
+                buttons: {
+                  OK: function () {
+                    $(this).dialog("close");
+                  }
+              },
+              close: function () {
+                barBot.communication.timeoutcounter = 0;
+                $(this).dialog("close");
+                $(this).remove();
+              }
+            });
+          } else if (data && data.state && data.state == "OK") {
+            
           }
         });
     },
@@ -379,8 +378,17 @@ function BarBot(container) {
             output += "<div class='order'><div class='button'>bestellen</div></div>";
             output += "</div>";
             output += "<div class='id'>" + data.drinkid + "</div>";
-            output += "";
+            output += "<div class='back'>Zurück</div>";
             $(".barbot .barbot_" + page + " .barbot_" + page + "_content .cocktaildetail").append(output);
+            $(".barbot .barbot_" + page + " .barbot_" + page + "_content .cocktaildetail .back").click(function(){
+                $(".barbot .barbot_loadingpage").hide();
+                $(".barbot .barbot_orderpage").show();
+                $(".barbot .barbot_settingspage").hide();
+                barBot.communication.loadCocktails("orderpage");
+            });
+            $(".barbot .barbot_" + page + " .barbot_" + page + "_content .cocktaildetail .order .button").click(function(){
+                barBot.communication.order(data.drinkid);
+            });
           }
         });
     },

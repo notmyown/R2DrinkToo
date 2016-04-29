@@ -47,7 +47,7 @@ min-height: 95vh;
 }
 .r2d2 .headline .title {
     position: absolute;
-    font-family: Starjedi;
+    font-family: StarjediFixed;
     font-size: 1.2vw;
     color: #adabac;
 }
@@ -211,7 +211,7 @@ text-align: center;
 padding-top: 10vh;
 }
 .barbot .barbot_loadingpage .barbot_loadingpage_star {
-    font-family: Starjedi;
+    font-family: StarjediFixed;
     color: #adabac;
 }
 .barbot .barbot_settingspage .menubutton {
@@ -221,7 +221,7 @@ padding-top: 10vh;
     border-radius: 50px;
     text-align: center;
     cursor: pointer;
-    font-family: Starjedi;
+    font-family: StarjediFixed;
     color: #153d82;
 }
 
@@ -324,7 +324,7 @@ width: 98%;
 }
 
 .cocktaildetail {
-    font-family: Starjedi;
+    font-family: StarjediFixed;
     color: #adabac;
 }
 
@@ -351,7 +351,7 @@ width: 98%;
    border: 2px solid #adabac;
     border-radius: 50px;
     cursor: pointer;
-    font-family: Starjedi;
+    font-family: StarjediFixed;
     margin: 4px 10px 10px;
     padding: 10px;
     text-align: center;
@@ -383,4 +383,15 @@ float: left;
 .cocktaildetail .image > img {
     width: 70%;
     position: relative;
+}
+
+
+
+.back {
+    color: red;
+    float: left;
+    font-size: 0.8em;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
 }
