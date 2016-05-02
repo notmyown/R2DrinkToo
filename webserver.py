@@ -162,8 +162,7 @@ def order_drink():
         cur.execute(sql)
         rows = cur.fetchall()
         f = [0] * barbotInterface.getPumpNum()
-        s.debug(len(rows))
-        
+        s.debug("Es wurden " + s.toString(len(rows)) + "Zutaten gefunden")
         for row in rows:
             slot = -1
             if not row["SLOT"] is None:
@@ -175,8 +174,8 @@ def order_drink():
     return json
 
 if __name__ == "__main__":
-    barbotInterface = barbot.BarBot()
     s.defaultLevel = s.DEBUG
+    barbotInterface = barbot.BarBot()
     try:
         app.run(host='0.0.0.0')
     finally:

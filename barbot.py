@@ -3,17 +3,24 @@ import strings as s
 import threading as thread
 import time
 
-import shiftpiMock as shiftpi
-#import shiftpi.shiftpi as shiftpi
+try:
+    import shiftpi.shiftpi as shiftpi
+except ImportError:
+    import shiftpiMock as shiftpi
 
-import capreadMock as capread
-#import capread
+try:
+    import capread
+except ImportError:
+    import capreadMock as capread
+
 
 def enum(**enums):
         return type('Enum', (), enums)
 
 #enumeration of the states of the machine
 States = enum(UNKNOWN="UNKNOWN", OK="OK", NOK="NOK")
+
+Pins = enum(GLAS_SENS_SEND=1, GLAS_SENS_RECIEVE=2, PUMP_SERIAL=25, PUMP_CLK=24, PUMP_SRCLK=23 )
 
 class BarBotState:
     glas = False
@@ -26,14 +33,19 @@ class BarBot:
     
     PUMP_NUM = 8
     PUMP_INTERVAL = 1000
-    capsense = 0
+    glascapsense = 0
     state = BarBotState()
     sensingthreadrunning = True
 
     def __init__(self):
         s.info("init BarBot")
-        self.capsense = capread.CapSense(1,2)
+        s.info("init  - initialisiere Pumpen")
+        shiftpi.pinsSetup({"ser": Pins.PUMP_SERIAL, "rclk": Pins.PUMP_CLK, "srclk": Pins.PUMP_SRCLK})
+        s.info("init  - Glas Sensor")
+        self.glascapsense = capread.CapSense(Pins.GLAS_SENS_SEND,Pins.GLAS_SENS_RECIEVE)
+        s.info("init  - Starte Sensoren")
         self.sensing()
+        
         #do InitVoddoo
         
     def shutdown(self):
@@ -84,9 +96,9 @@ class BarBot:
         sensingthread = thread.Thread(target=self._readGlasSensor)
         sensingthread.setDaemon(True)
         sensingthread.start()
-        
+    
     def _readGlasSensor(self):
         while(self.sensingthreadrunning):
-            self.state.glas = self.capsense.read()
+            self.state.glas = self.glascapsense.read()
             time.sleep(1)
         s.debug("Exit readGlasSensor")
