@@ -177,4 +177,8 @@ def order_drink():
 if __name__ == "__main__":
     barbotInterface = barbot.BarBot()
     s.defaultLevel = s.DEBUG
-    app.run(host='0.0.0.0')
+    try:
+        app.run(host='0.0.0.0')
+    finally:
+        barbotInterface.shutdown()
+        s.debug("Exit")
