@@ -300,30 +300,58 @@ function BarBot(container) {
       }
       $.ajax({ url: barBot.serverurl + "/order", dataType: 'jsonp', jsonp: "callback", data: reqdata })
         .always(function (data) {
-          if (data && data.state && data.state == "NOK") {
-            $('<div></div>').appendTo('body')
-              .html('<div><h6>Das Getränk kann nicht zubereitet werden</h6></div>')
-              .dialog({
-                modal: true,
-                title: 'R2DrinkToo ist nicht bereit',
-                zIndex: 10000,
-                autoOpen: true,
-                width: '95%',
-                resizable: false,
-                buttons: {
-                  OK: function () {
-                    $(this).dialog("close");
-                  }
-              },
-              close: function () {
-                barBot.communication.timeoutcounter = 0;
-                $(this).dialog("close");
-                $(this).remove();
-              }
+          $(".barbot .barbot_orderpage .barbot_orderpage_content").html("<div class='cocktaildetail'></div>");
+            var output = "";
+            output += "<div class='name'><h1>" + data.name + "</h1></div>";
+            output += "<div class='row'>";
+            output += "<div class='ingredients'>Bitte stellen Sie ein Glas mit folgendem Inhalt in den Ausgabeschacht des R2DrinkToo<br><ul>";
+            data.provided.forEach(function(s,i,o) {
+                output += "<li>" + s + "</li>";
             });
-          } else if (data && data.state && data.state == "OK") {
-            
-          }
+            output += "</ul></div>";
+            output += "<div class='ingredients'>Die folgenden Zutaten sind nicht im R2DrinkToo vorhanden. Wenn Sie fortfahren, müssen Sie die Inhaltsstoffe selbstständig ergänzen.<br><ul>";
+            data.missing.forEach(function(s,i,o) {
+                output += "<li>" + s + "</li>";
+            });
+            output += "</ul></div>";
+            output += "<div class='id'>" + reqdata.drinkid + "</div>";
+            output += "<div class='order'><div class='button'>fortfahren</div></div>";
+            output += "</div>";
+            output += "<div class='back'>Zurück</div>";
+            $(".barbot .barbot_orderpage .barbot_orderpage_content .cocktaildetail").append(output);
+            $(".barbot .barbot_orderpage .barbot_orderpage_content .cocktaildetail .back").click(function(){
+                $(".barbot .barbot_loadingpage").hide();
+                $(".barbot .barbot_orderpage").show();
+                $(".barbot .barbot_settingspage").hide();
+                barBot.communication.loadCocktails("orderpage");
+            });
+            $(".barbot .barbot_orderpage .barbot_orderpage_content .cocktaildetail .order .button").click(function(){
+                barBot.communication.pumping(data.drinkid);
+            });
+        });
+    },
+    pumping: function compump(num) {
+      var reqdata = {
+        drinkid: num
+      }
+      $.ajax({ url: barBot.serverurl + "/pumping", dataType: 'jsonp', jsonp: "callback", data: reqdata })
+        .always(function (data) {
+          $(".barbot .barbot_orderpage .barbot_orderpage_content").html("<div class='cocktaildetail'></div>");
+            var output = "";
+            output += "<div class='name'><h1>" + data.name + "</h1></div>";
+            output += "<div class='row'>";
+            output += "Bitte Warten"
+            output += "<div class='id'>" + reqdata.drinkid + "</div>";
+            output += "<div class='order'><div class='button'></div></div>";
+            output += "</div>";
+            output += "<div class='back'>Zurück</div>";
+            $(".barbot .barbot_orderpage .barbot_orderpage_content .cocktaildetail").append(output);
+            $(".barbot .barbot_orderpage .barbot_orderpage_content .cocktaildetail .back").click(function(){
+                $(".barbot .barbot_loadingpage").hide();
+                $(".barbot .barbot_orderpage").show();
+                $(".barbot .barbot_settingspage").hide();
+                barBot.communication.loadCocktails("orderpage");
+            });
         });
     },
     loadCocktails: function loadCocktails(page) {

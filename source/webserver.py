@@ -16,7 +16,7 @@ def index():
 @app.route('/barbot/status', methods=['GET', 'POST'])
 def status():
     callback = request.args.get('callback')
-    json = s.toString(callback) + "({"
+    json = s.toString(callback) + "({ \"state\":\"\""
     json += "})"
     return json
 
@@ -163,15 +163,60 @@ def order_drink():
         rows = cur.fetchall()
         f = [0] * barbotInterface.getPumpNum()
         s.debug("Es wurden " + s.toString(len(rows)) + "Zutaten gefunden")
+        provided = "["
+        missing = "["
+        present = "["
         for row in rows:
-            slot = -1
+            if row["SLOT"] is None and row["PROVIDED"] == 1:
+                provided += "\"" + row["INGREDIENT"] + "\","
+            if row["SLOT"] is None and row["PROVIDED"] == 0:
+                missing += "\"" + row["INGREDIENT"] + "\","
+            if not row["SLOT"] is None:
+                slot = int(row["SLOT"])
+                present += "\"" + row["INGREDIENT"] + "\","
+            if slot > -1 and slot < barbotInterface.getPumpNum():
+                f[slot-1] = int(row["AMOUNT"])
+        provided += "]"
+        missing += "]"
+        present += "]"
+        s.debug("Es wird vorrausgesetzt:" + s.toString(provided))
+        s.debug("Es fehlt" + s.toString(missing))
+        s.debug("Ermittelte Pumpkonfiguration: " + s.toString(f))
+        json = s.toString(callback) + "({"
+        json += "\"provided\":" + provided + ","
+        json += "\"missing\":" + missing + ","
+        json += "\"present\":" + present + ","
+        json += "\"name\":\"" + rows[0]["NAME"] + "\","
+        if len(provided) == 2 and len(missing) == 2:
+            json += "\"pumping\":\"go\""
+        json += "})"
+    return json
+
+@app.route("/barbot/pumping")
+def order_drink_pumping():
+    callback = request.args.get('callback')
+    con = lite.connect(dbname)
+    with con:
+        con.row_factory = lite.Row
+        cur = con.cursor()
+        drinkid = request.args.get('drinkid')
+        s.debug("Suche Drink mit ID " + s.toString(drinkid))
+        sql = "select Drinks.NAME, Ingredients.NAME as INGREDIENT,  IngredientsToDrinks.AMOUNT, IngredientsToDrinks.PROVIDED, Slot.ID as SLOT "
+        sql += "from Drinks join IngredientsToDrinks on Drinks.ID = IngredientsToDrinks.DRINKID join Ingredients on IngredientsToDrinks.INGREDIENT = Ingredients.ID left join Slot on Slot.INGREDIENT = Ingredients.ID "
+        sql += "where Drinks.ID = " + s.toString(drinkid)
+        cur.execute(sql)
+        rows = cur.fetchall()
+        f = [0] * barbotInterface.getPumpNum()
+        s.debug("Es wurden " + s.toString(len(rows)) + "Zutaten gefunden")
+        for row in rows:
             if not row["SLOT"] is None:
                 slot = int(row["SLOT"])
             if slot > -1 and slot < barbotInterface.getPumpNum():
                 f[slot-1] = int(row["AMOUNT"])
         s.debug("Ermittelte Pumpkonfiguration: " + s.toString(f))
-        json = s.toString(callback) + '({"state": "' + barbotInterface.pumping(f) + '"})'
+        json = s.toString(callback) + "({\"state\":\"" + barbotInterface.pumping(f) + "\"})"
     return json
+
 
 if __name__ == "__main__":
     s.defaultLevel = s.DEBUG
